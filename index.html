@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MK Solutions | ERP para ISPs • Módulo de Contratos</title>
+
+  <!-- Fonte (ok no GitHub Pages) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --mk-dark:#0b1f2a;
+      --mk-dark-2:#0f2a38;
+      --mk-blue:#0b3a4d;
+      --mk-green:#00b37e;
+      --mk-bg:#ffffff;
+      --mk-soft:#f5f7fb;
+      --mk-soft-2:#eef3f7;
+      --mk-text:#0f172a;
+      --mk-muted:#475569;
+      --mk-border:#e6edf3;
+      --shadow-1: 0 12px 30px rgba(2, 8, 23, 0.08);
+      --shadow-2: 0 18px 44px rgba(2, 8, 23, 0.10);
+      --radius: 16px;
+      --radius-lg: 22px;
+      --max: 1200px;
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    html, body{ background:var(--mk-bg); color:var(--mk-text); scroll-behavior:smooth; }
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; }
+
+    .container{ max-width:var(--max); margin:0 auto; padding:0 22px; }
+    .section{ padding:86px 0; }
+    .section.soft{ background: linear-gradient(180deg, var(--mk-soft), #fff); }
+    .section.soft2{ background: var(--mk-soft); }
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border:1px solid rgba(255,255,255,0.14);
+      border-radius:999px; color:#e2e8f0; background:rgba(255,255,255,0.06);
+      font-size:0.95rem;
+      backdrop-filter: blur(8px);
+    }
+    .dot{ width:8px; height:8px; border-radius:999px; background:var(--mk-green); box-shadow:0 0 0 4px rgba(0,179,126,0.18); }
+
+    .topbar{
+      position:sticky; top:0; z-index:99;
+      background: rgba(11,31,42,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+    .topbar .wrap{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+    }
+    .brand{ display:flex; align-items:center; gap:14px; }
+    .brand img{ height:42px; width:auto; }
+    .brand .title{ display:flex; flex-direction:column; gap:2px; color:#fff; }
+    .brand .title strong{ font-size:0.98rem; letter-spacing:0.2px; }
+    .brand .title span{ font-size:0.86rem; color:#cbd5e1; }
+
+    .nav{
+      display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+      color:#dbeafe; font-size:0.95rem;
+    }
+    .nav a{ padding:8px 10px; border-radius:10px; transition:.2s; opacity:.92; }
+    .nav a:hover{ background:rgba(255,255,255,0.08); opacity:1; }
+
+    .cta{ display:flex; align-items:center; gap:10px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:12px 16px; border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color:#fff; cursor:pointer; transition:.2s;
+      font-weight:600; font-size:0.95rem;
+    }
+    .btn:hover{ transform:translateY(-1px); background: rgba(255,255,255,0.12); }
+    .btn.primary{ background: var(--mk-green); color:#05201a; border:1px solid rgba(0,0,0,0.08); }
+    .btn.primary:hover{ filter: brightness(0.96); }
+
+    .hero{
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(0,179,126,0.20), transparent 50%),
+                  radial-gradient(1000px 500px at 80% 0%, rgba(30,58,138,0.18), transparent 45%),
+                  linear-gradient(90deg, var(--mk-dark), var(--mk-dark-2));
+      color:#fff; padding:78px 0 86px; overflow:hidden; position:relative;
+    }
+    .hero-grid{
+      display:grid; grid-template-columns: 1.08fr 0.92fr;
+      gap:38px; align-items:center;
+    }
+    .hero h1{
+      font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+      line-height:1.08; letter-spacing:-0.6px;
+      margin:16px 0 14px;
+    }
+    .hero p{ color:#dbeafe; font-size:1.08rem; line-height:1.75; max-width:58ch; margin-bottom:18px; }
+
+    .hero .bullets{
+      display:grid; grid-template-columns: 1fr 1fr;
+      gap:10px 14px; margin:18px 0 26px;
+    }
+    .hero .bullet{ display:flex; gap:10px; align-items:flex-start; color:#e2e8f0; font-size:0.98rem; opacity:.96; }
+    .check{
+      width:18px; height:18px; border-radius:6px;
+      background: rgba(0,179,126,0.22);
+      border:1px solid rgba(0,179,126,0.35);
+      display:inline-flex; align-items:center; justify-content:center;
+      margin-top:2px; flex:0 0 18px;
+    }
+    .check:after{
+      content:""; width:8px; height:4px;
+      border-left:2px solid var(--mk-green);
+      border-bottom:2px solid var(--mk-green);
+      transform:rotate(-45deg); display:block;
+    }
+
+    .hero-card{
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      padding:22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+      backdrop-filter: blur(10px);
+    }
+    .hero-card h3{ font-size:1.06rem; color:#fff; margin-bottom:10px; letter-spacing:0.2px; }
+    .metric{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:12px 12px; border-radius:14px;
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.10);
+      margin-bottom:10px;
+    }
+    .metric span{ color:#cbd5e1; font-size:0.92rem; }
+    .metric strong{ color:#fff; font-size:1.05rem; }
+    .hero-note{ margin-top:12px; color:#cbd5e1; font-size:0.92rem; line-height:1.6; }
+
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid var(--mk-border);
+      background:#fff; color:var(--mk-dark-2);
+      font-weight:700; font-size:0.9rem;
+    }
+    .kicker .dot{ box-shadow:none; }
+    .section h2{ font-size:2.1rem; color:var(--mk-dark-2); margin:14px 0 14px; letter-spacing:-0.4px; }
+    .lead{ color:var(--mk-muted); max-width:86ch; font-size:1.05rem; line-height:1.8; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap:18px; margin-top:30px;
+    }
+    .card{
+      background:#fff;
+      border:1px solid var(--mk-border);
+      border-radius: var(--radius);
+      padding:20px;
+      box-shadow: var(--shadow-1);
+      transition:.22s;
+    }
+    .card:hover{ transform: translateY(-4px); box-shadow: var(--shadow-2); }
+    .card h3{ font-size:1.05rem; color:var(--mk-dark-2); margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+    .badge{
+      font-size:0.78rem; font-weight:800;
+      color:#062a21;
+      background: rgba(0,179,126,0.18);
+      border:1px solid rgba(0,179,126,0.30);
+      padding:4px 8px; border-radius:999px;
+    }
+    .card p{ color:var(--mk-muted); font-size:0.98rem; line-height:1.7; }
+
+    .img-block{
+      margin-top:26px; border-radius: var(--radius-lg);
+      overflow:hidden;
+      border:1px solid var(--mk-border);
+      background:#fff; box-shadow: var(--shadow-1);
+    }
+    .img-block .cap{
+      padding:16px 18px;
+      border-top:1px solid var(--mk-border);
+      background: linear-gradient(180deg, #fff, var(--mk-soft));
+      color:var(--mk-muted);
+      font-size:0.95rem; line-height:1.65;
+    }
+    .img-block .cap strong{ color:var(--mk-dark-2); }
+
+    .list{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap:14px;
+    }
+    .item{
+      background:#fff;
+      border:1px solid var(--mk-border);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: var(--shadow-1);
+    }
+    .item h4{ color:var(--mk-dark-2); font-size:1rem; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+    .item p{ color:var(--mk-muted); font-size:0.96rem; line-height:1.7; }
+
+    .callout{
+      margin-top:26px;
+      padding:18px 18px;
+      background: #e9fbf4;
+      border:1px solid rgba(0,179,126,0.22);
+      border-left:6px solid var(--mk-green);
+      border-radius: var(--radius);
+      color: #0b2b22;
+      line-height:1.75;
+    }
+    .callout strong{ color:#063026; }
+
+    footer{
+      background: var(--mk-dark);
+      color:#cbd5e1;
+      border-top:1px solid rgba(255,255,255,0.08);
+      padding:30px 0;
+    }
+    footer .foot{
+      display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;
+    }
+    footer small{ color:#cbd5e1; opacity:.92; line-height:1.6; }
+    .foot a{ text-decoration:underline; text-underline-offset:3px; }
+
+    .fade{ opacity:0; transform: translateY(16px); transition: 700ms ease; }
+    .fade.show{ opacity:1; transform: translateY(0); }
+
+    @media (max-width: 980px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .nav{ display:none; }
+    }
+    @media (max-width: 520px){
+      .brand .title{ display:none; }
+      .hero .bullets{ grid-template-columns: 1fr; }
+      .btn{ padding:11px 14px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <div class="wrap">
+      <div class="brand">
+        <img src="assetslogo-mk.png" alt="MK Solutions">
+        <div class="title">
+          <strong>ERP MK Solutions para ISPs</strong>
+          <span>Gestão integrada • financeiro • contratos</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navegação">
+        <a href="#visao">Visão do ERP</a>
+        <a href="#contratos">Módulo de Contratos</a>
+        <a href="#barra">Barra Superior</a>
+        <a href="#tela">Painel</a>
+        <a href="#botoes">Botões Inferiores</a>
+        <a href="#financeiro">Financeiro</a>
+      </nav>
+
+      <div class="cta">
+        <a class="btn" href="#tela">Ver painel</a>
+        <a class="btn primary" href="#financeiro">Ver integração</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="pill"><span class="dot"></span> Feito para o dia a dia do provedor</span>
+        <h1>ERP MK Solutions: organização, controle e visão para escalar seu ISP.</h1>
+        <p>
+          O ERP da MK Solutions é um ecossistema de gestão para ISPs. Ele conecta módulos de forma prática:
+          contratos, financeiro e operação conversando entre si para reduzir retrabalho, dar rastreabilidade
+          e acelerar decisões. Nesta página eu apresento, com foco comercial e funcional, o <strong>Gerenciador de Contratos</strong>
+          e como ele se integra ao financeiro sem perder a visão de que isso é parte do ERP completo.
+        </p>
+
+        <div class="bullets">
+          <div class="bullet"><span class="check"></span><span><strong>Status e rastreabilidade</strong> do ciclo contratual.</span></div>
+          <div class="bullet"><span class="check"></span><span><strong>Renovações e prazos</strong> com visão operacional.</span></div>
+          <div class="bullet"><span class="check"></span><span>Integração com <strong>cobrança e financeiro</strong> para controle de receita.</span></div>
+          <div class="bullet"><span class="check"></span><span><strong>Relatórios</strong> para gestão e tomada de decisão.</span></div>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+          <a class="btn primary" href="#contratos">Conhecer o módulo</a>
+          <a class="btn" href="#barra">Ver ações do sistema</a>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <h3>O que um ISP ganha na prática</h3>
+        <div class="metric"><span>Menos retrabalho</span><strong>Processos padronizados</strong></div>
+        <div class="metric"><span>Mais controle</span><strong>Auditoria por operador</strong></div>
+        <div class="metric"><span>Mais previsibilidade</span><strong>Prazos e renovações</strong></div>
+        <div class="metric"><span>Receita protegida</span><strong>Integração financeira</strong></div>
+        <div class="hero-note">
+          * O ERP tem outros módulos (estoque, operação, mapas, etc.). Aqui eu foco no módulo de contratos e sua integração
+          com o financeiro, porque é onde o provedor sente ganho imediato no dia a dia.
+        </div>
+      </aside>
+    </div>
+  </div>
+</header>
+
+<section id="visao" class="section soft">
+  <div class="container">
+    <span class="kicker"><span class="dot"></span> Visão do ERP</span>
+    <h2>Um ERP completo com contratos de forma estratégica</h2>
+    <p class="lead">
+      Para um provedor, contrato não é “só cadastro”, contrato é o que define plano, condições, vigência,
+      regras de renovação e o que precisa refletir no financeiro. Por isso, dentro do ERP MK Solutions,
+      o módulo de contratos funciona como uma engrenagem integrada: ele alimenta processos e recebe informações de outros módulos,
+      mantendo tudo consistente e rastreável.
+    </p>
+
+    <div class="grid">
+      <div class="card fade">
+        <h3>Centralização <span class="badge">padroniza</span></h3>
+        <p>Em vez de cada equipe trabalhar “do seu jeito”, o ERP entrega um fluxo único, reduzindo erros e divergências de informação.</p>
+      </div>
+      <div class="card fade">
+        <h3>Rastreabilidade <span class="badge">audita</span></h3>
+        <p>Cada ação fica registrada por operador e horário. Isso dá segurança para o provedor e agilidade na resolução de dúvidas.</p>
+      </div>
+      <div class="card fade">
+        <h3>Integração <span class="badge">conecta</span></h3>
+        <p>O módulo de contratos conversa com o financeiro, cobranças e relatórios. O objetivo é reduzir retrabalho e proteger receita.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Importante:</strong> o ERP MK Solutions possui outros recursos (como operação, mapas, estoque e mais),
+      mas nesta apresentação eu foco no <strong>Gerenciador de Contratos</strong> e como ele se conecta ao <strong>Financeiro</strong>,
+      porque isso é decisivo para a rotina de um ISP.
+    </div>
+  </div>
+</section>
+
+<section id="contratos" class="section">
+  <div class="container">
+    <span class="kicker"><span class="dot"></span> Módulo de Contratos</span>
+    <h2>Gerenciador de Contratos: visão operacional, controle e velocidade</h2>
+    <p class="lead">
+      Na prática, o provedor precisa enxergar rapidamente o que foi processado, o que está pendente,
+      quem executou, quando executou e qual foi o resultado. Esse módulo entrega exatamente isso:
+      um painel de acompanhamento com filtros, status e rastreabilidade do jeito que o suporte e o financeiro precisam.
+    </p>
+
+    <div class="grid">
+      <div class="card fade">
+        <h3>Ciclo de vida do contrato</h3>
+        <p>Organiza e acompanha contratos por status, facilitando ações de rotina (consulta, ajuste, reprocesso e conferência).</p>
+      </div>
+      <div class="card fade">
+        <h3>Renovações e prazos</h3>
+        <p>Ajuda a identificar contratos por período e acompanhar a execução (início/fim), evitando “furo” de vencimento.</p>
+      </div>
+      <div class="card fade">
+        <h3>Visão por operador</h3>
+        <p>Mostra quem fez o quê. Isso acelera auditoria e reduz ruído entre atendimento, financeiro e gestão.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BARRA SUPERIOR (ATUALIZADA COM AS 15 OPÇÕES) -->
+<section id="barra" class="section soft2">
+  <div class="container">
+    <span class="kicker"><span class="dot"></span> Interface • Ações</span>
+    <h2>Barra superior: ações rápidas para o dia a dia do ISP</h2>
+    <p class="lead">
+      A barra superior reúne atalhos que aceleram o trabalho: consultar, validar, confirmar, cancelar,
+      acompanhar prazos, acessar rotinas financeiras e gerar relatórios. Isso reduz cliques, economiza tempo
+      e ajuda o time a atuar com padrão.
+    </p>
+
+    <div class="img-block fade">
+      <img src="assetsbarra-superior.png" alt="Barra superior de ações do sistema">
+      <div class="cap">
+        <strong>Como usar:</strong> em uma rotina típica, você consulta, valida a informação, confirma a operação e acompanha o resultado.
+        As demais ações (prazos, relatórios e financeiro) entram para apoiar análise e tomada de decisão.
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="item fade"><h4>1️⃣ Histórico de rotinas de renovações</h4><p>Acompanha as execuções das rotinas de renovação (o que rodou, quando rodou e o status do processamento).</p></div>
+      <div class="item fade"><h4>2️⃣ Contratos renovados nos últimos 120 dias</h4><p>Visão rápida de renovações recentes para validar comportamento da carteira e rotinas de renovação.</p></div>
+      <div class="item fade"><h4>3️⃣ Contratos Ativos</h4><p>A carteira viva do provedor, contratos ativos para consulta e acompanhamento operacional.</p></div>
+      <div class="item fade"><h4>4️⃣ Contratos Suspensos</h4><p>Lista contratos suspensos para análise e ação conforme regras internas do ISP.</p></div>
+      <div class="item fade"><h4>5️⃣ Contratos Cancelados</h4><p>Visão de contratos cancelados, importante para auditoria, conferência e análise de churn.</p></div>
+      <div class="item fade"><h4>6️⃣ Aceites pendentes MK3.0</h4><p>Mostra contratos que ainda não tiveram aceite, evitando pendência comercial/jurídica virar problema.</p></div>
+      <div class="item fade"><h4>7️⃣ Contratos Sem Faturamento</h4><p>O painel que protege receita: contratos que não estão gerando cobrança aparecem aqui.</p></div>
+      <div class="item fade"><h4>8️⃣ Contratos vencidos</h4><p>Lista contratos vencidos para ação rápida (antes de virar fila de reclamação ou inadimplência).</p></div>
+      <div class="item fade"><h4>9️⃣ Contratos que vencem nos próximos 30 dias</h4><p>Visão preventiva para antecipar renovação, contato e correções antes do vencimento.</p></div>
+      <div class="item fade"><h4>1️⃣0️⃣ Contratos que aguardam ativação</h4><p>Contratos criados que ainda não efetivaram/ativaram, controla onboarding e pendências.</p></div>
+      <div class="item fade"><h4>1️⃣1️⃣ Inconsistência nos contratos que estão aguardando ativação</h4><p>Painel de troubleshooting: mostra contratos presos por inconsistência antes da ativação.</p></div>
+      <div class="item fade"><h4>1️⃣2️⃣ Relação de upgrades e downgrades do último ano</h4><p>Mostra movimentações comerciais (subida/descida de plano) e dá visão real da evolução da base.</p></div>
+      <div class="item fade"><h4>1️⃣3️⃣ Regras de descontos por inatividade geradas</h4><p>Controle das regras/gerações de descontos por inatividade com rastreabilidade e padrão.</p></div>
+      <div class="item fade"><h4>1️⃣4️⃣ Templates de informações sintéticas</h4><p>Templates para visões e relatórios sintéticos, gestão rápida com padrão.</p></div>
+      <div class="item fade"><h4>1️⃣5️⃣ Templates de pesquisa</h4><p>Modelos de pesquisa e filtros salvos para repetir consultas importantes sem retrabalho.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="tela" class="section">
+  <div class="container">
+    <span class="kicker"><span class="dot"></span> Painel do módulo</span>
+    <h2>Painel de contratos: filtros, status e rastreabilidade</h2>
+    <p class="lead">
+      Esse painel é onde o time trabalha de verdade. Ele permite filtrar por código, tipo de renovação,
+      status de finalização, operador e datas. Em atendimento, isso faz diferença: você consegue chegar no ponto do problema rápido.
+    </p>
+
+    <div class="img-block fade">
+      <img src="assetspainel.png" alt="Tela principal do gerenciador de contratos">
+      <div class="cap">
+        <strong>Leitura rápida do painel:</strong> o provedor enxerga o que foi finalizado, por qual operador,
+        e em qual período o processo rodou. Isso ajuda em auditoria, suporte e rotina financeira.
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card fade"><h3>Filtros práticos</h3><p>Você não precisa “caçar” informação. Filtra por coluna e encontra o que precisa com velocidade e clareza.</p></div>
+      <div class="card fade"><h3>Info Wizard</h3><p>Mostra o estado/resultado do processamento. Ajuda a entender se o fluxo foi concluído ou se ficou pendente.</p></div>
+      <div class="card fade"><h3>Operador e auditoria</h3><p>Registro por operador e horários. Perfeito para suporte: “quem executou isso?” tem resposta objetiva.</p></div>
+      <div class="card fade"><h3>Datas e horários</h3><p>Controle de início e fim dá visão real de execução, útil para gestão do time e acompanhamento de rotina.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="botoes" class="section soft">
+  <div class="container">
+    <span class="kicker"><span class="dot"></span> Operação</span>
+    <h2>Botões inferiores: ações diretas no registro</h2>
+    <p class="lead">
+      Aqui ficam os comandos de execução no registro selecionado. A ideia é simples:
+      você seleciona a linha e executa a ação certa como visualizar, editar, renovar/reprocessar, excluir (conforme permissão) e atualizar.
+    </p>
+
+    <div class="img-block fade">
+      <img src="assetsbotoes-inferiores.png" alt="Botões inferiores do sistema">
+      <div class="cap">
+        <strong>Dica de uso:</strong> sempre valide o registro selecionado antes de editar/excluir e mantenha padrão operacional.
+        Isso evita erros e garante consistência com o financeiro.
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="item fade"><h4>📄 Visualizar</h4><p>Abre o contrato selecionado para consulta completa: detalhes, histórico e informações necessárias para atendimento.</p></div>
+      <div class="item fade"><h4>❌ Cancelar / Excluir</h4><p>Interrompe operação em andamento ou remove registro (dependendo do contexto e permissões). Operação sempre controlada.</p></div>
+      <div class="item fade"><h4>✏️ Editar</h4><p>Permite ajustar dados contratuais com segurança. Útil quando o ISP precisa corrigir informação rapidamente.</p></div>
+      <div class="item fade"><h4>🔁 Renovar / Reprocessar</h4><p>Executa rotina de renovação/reprocessamento. Ajuda a manter a base “em dia” e reduzir trabalho manual.</p></div>
+      <div class="item fade"><h4>🔄 Atualizar</h4><p>Recarrega a listagem e sincroniza a visão com o banco. Bom para quando há alterações simultâneas por outros usuários.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="financeiro" class="section">
+  <div class="container">
+    <span class="kicker"><span class="dot"></span> Integração</span>
+    <h2>Integração com o Financeiro: onde o contrato vira receita</h2>
+    <p class="lead">
+      Para um ISP, a grande dor é perder tempo conciliando informação: contrato em um lugar, cobrança em outro, status em outro.
+      No ERP MK Solutions, a lógica é central: o módulo de contratos conversa com o financeiro para sustentar rotinas como contas a receber,
+      cobranças e relatórios gerenciais. Isso protege receita e deixa o time mais rápido.
+    </p>
+
+    <div class="img-block fade">
+      <img src="assetsmenu-financeiro.png" alt="Menu financeiro do ERP">
+      <div class="cap">
+        <strong>Visão do módulo financeiro:</strong> o usuário com permissão navega por rotinas como faturamento, cobrança,
+        contas a pagar/receber, fluxo de caixa e relatórios gerenciais.
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card fade"><h3>Contas a Receber</h3><p>Centraliza recebíveis e ajuda a acompanhar o que está em aberto. Contrato consistente evita cobrança errada.</p></div>
+      <div class="card fade"><h3>Gestão de Cobranças</h3><p>Rotina essencial para reduzir inadimplência e organizar a régua de cobrança do provedor.</p></div>
+      <div class="card fade"><h3>Fluxo de Caixa</h3><p>Visão clara de entradas e saídas. Ajuda o ISP a planejar investimento e expansão com segurança.</p></div>
+      <div class="card fade"><h3>DRE / Relatórios</h3><p>Consolida visão gerencial. Bom para diretoria enxergar resultado, margem e evolução do negócio.</p></div>
+    </div>
+
+    <div class="callout">
+      <strong>Resumo para o ISP:</strong> contratos bem geridos + financeiro integrado = <strong>menos ruído</strong>, <strong>mais controle</strong>
+      e <strong>decisão mais rápida</strong>. É assim que o ERP MK Solutions ajuda o provedor a escalar mantendo qualidade.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot">
+      <small>
+        © 2026 • Apresentação demonstrativa do ecossistema ERP MK Solutions para ISPs (foco: módulo de contratos + integração financeira).<br>
+        Conteúdo elaborado em formato de portfólio, com linguagem comercial e funcional.
+      </small>
+      <small><a href="#visao">Voltar ao topo</a></small>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.fade');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('show');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.18 });
+  els.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
